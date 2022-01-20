@@ -1,18 +1,18 @@
 /*
- * Archivo:         Prelab8.c
+ * Archivo:         Lab0.c
  * Dispositivo:     PIC16F887
- * Autor:           Francisco Javier LÛpez
+ * Autor:           Francisco Javier L√≥pez
  *
- * Programa:        Carrera entre dos jugadores, con una cuenta atr·s 
- *                  representada por un sem·foro y un display, donde cada 
- *                  jugador tiene un botÛn que controla un contador de dÈcadas, 
- *                  al jugador que gana se le enciende una led de indicaciÛn
+ * Programa:        Carrera entre dos jugadores, con una cuenta atr√°s 
+ *                  representada por un sem√°foro y un display, donde cada 
+ *                  jugador tiene un bot√≥n que controla un contador de d√©cadas, 
+ *                  al jugador que gana se le enciende una led de indicaci√≥n
  * 
  * Hardware:        8 Leds en Puerto A, 8 Leds en Puerto D, 3 Leds en Puerto E, 
  *                  Display en Puerto C, 2 Leds y 3 Botones en Puerto B
  * 
  * Creado: 17 de enero de 2022
- * ⁄ltima ModificaciÛn: 19 de enero de 2022
+ * √öltima Modificaci√≥n: 19 de enero de 2022
  */
 
 
@@ -45,8 +45,8 @@
 #define _XTAL_FREQ 1000000
 
 // Variables
-uint8_t iocbEnable = 1;         // Variable que act˙a como enable de los botones
-uint8_t timerEnable = 0;        // Variable que act˙a como enable de los botones
+uint8_t iocbEnable = 1;         // Variable que act√∫a como enable de los botones
+uint8_t timerEnable = 0;        // Variable que act√∫a como enable de los botones
 uint8_t contador = 3;           // Variable que funciona como contador de 3 a 0
 
 // Prototipos de funciones
@@ -62,7 +62,7 @@ uint8_t display(uint8_t valor);
 // Interrupciones
 void __interrupt() isr (void)
 {   
-    if(PIR1bits.TMR1IF)         // Si la bandera est· encendida, entrar
+    if(PIR1bits.TMR1IF)         // Si la bandera est√° encendida, entrar
     {
         if(contador>=0)         // Si contador es mayor o igual a 0, decrementar
         {
@@ -85,7 +85,7 @@ void __interrupt() isr (void)
         {
             if(!PORTA)
             {
-                PORTA++;            // Incrementar en 1 PORTA si est· en 0
+                PORTA++;            // Incrementar en 1 PORTA si est√° en 0
             }
             else
             {
@@ -96,7 +96,7 @@ void __interrupt() isr (void)
         {
             if(!PORTD)
             {
-                PORTD++;            // Incrementar en 1 PORTA si est· en 0
+                PORTD++;            // Incrementar en 1 PORTA si est√° en 0
             }
             else
             {
@@ -119,19 +119,19 @@ void main(void)
     
     while(1)
     {
-        if(PORTAbits.RA7)           // Si ya terminÛ el jugador 1
+        if(PORTAbits.RA7)           // Si ya termin√≥ el jugador 1
         {
             PORTBbits.RB0 = 1;      // Encender led de ganador
             iocbEnable = 0;         // Desactivar botones
         }
         
-        if(PORTDbits.RD7)           // Si ya terminÛ el jugador 2
+        if(PORTDbits.RD7)           // Si ya termin√≥ el jugador 2
         {
             PORTBbits.RB1 = 1;      // Encender led de ganador
             iocbEnable = 0;         // Desactivar botones
         }
         
-        if(contador < 4 && contador != 0)   // Si contador est· entre 3 y 1, deshabilitar
+        if(contador < 4 && contador != 0)   // Si contador est√° entre 3 y 1, deshabilitar
         {
             timerEnable = 0;
         }
@@ -140,13 +140,13 @@ void main(void)
             timerEnable = 1;
         }
         
-        semaforo(contador);         // Activar sem·foro bas·ndose en contador
+        semaforo(contador);         // Activar sem√°foro bas√°ndose en contador
         PORTC = display(contador);  // Codificar al display el tiempo de contador
     }
 }
 
 // Funciones
-void config_io(void)            // ConfiguraciÛn de entradas y salidas
+void config_io(void)            // Configuraci√≥n de entradas y salidas
 {
     ANSEL   =   0;              // Puertos digitales
     ANSELH  =   0;
@@ -165,7 +165,7 @@ void config_io(void)            // ConfiguraciÛn de entradas y salidas
     return;
 }
 
-void config_reloj(void)         // ConfiguraciÛn del oscilador
+void config_reloj(void)         // Configuraci√≥n del oscilador
 {
     OSCCONbits.IRCF2 = 1;       // 1MHz
     OSCCONbits.IRCF1 = 0;       // 
@@ -174,20 +174,20 @@ void config_reloj(void)         // ConfiguraciÛn del oscilador
     return;
 }
 
-void config_int(void)           // ConfiguraciÛn de interrupciones
+void config_int(void)           // Configuraci√≥n de interrupciones
 {
     INTCONbits.GIE  = 1;        // Activar interrupciones
-    INTCONbits.PEIE = 1;        // Activar interrupciones perifÈricas
+    INTCONbits.PEIE = 1;        // Activar interrupciones perif√©ricas
     INTCONbits.RBIE = 1;        // Activar interrupciones de PuertoB
     INTCONbits.RBIF = 0;        // Apagar bandera de overflow de PuertoB
-    PIE1bits.TMR1IE = 1;        // Activar interrupciÛn de Timer1
+    PIE1bits.TMR1IE = 1;        // Activar interrupci√≥n de Timer1
     PIR1bits.TMR1IF = 0;        // Apagar bandera de overflow de Timer1
     return;
 }
 
 void config_wpub(void)
 {
-    OPTION_REGbits.nRBPU = 0;   // Encender configuraciÛn de weak pullups
+    OPTION_REGbits.nRBPU = 0;   // Encender configuraci√≥n de weak pullups
     WPUB    =   0b11100000;     // Encender 3 pullups del puerto b (botones)
     return;
 }
@@ -211,7 +211,7 @@ void config_tmr1(void)          // Timer1 a 1 segundo
     return;
 }
 
-void semaforo(uint8_t num)      // FunciÛn que enciende los leds del sem·foro
+void semaforo(uint8_t num)      // Funci√≥n que enciende los leds del sem√°foro
 {
     switch(num)
     {
@@ -233,7 +233,7 @@ void semaforo(uint8_t num)      // FunciÛn que enciende los leds del sem·foro
     return;
 }
 
-uint8_t display(uint8_t valor)    // Traduce n˙meros de 0-3 a valores de display
+uint8_t display(uint8_t valor)    // Traduce n√∫meros de 0-3 a valores de display
 {
     switch(valor)
     {
